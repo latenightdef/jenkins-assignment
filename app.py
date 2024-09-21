@@ -1,26 +1,29 @@
-from flask import Flask, jsonify, abort,Response
+from flask import Flask, jsonify
+from werkzeug import exceptions
 
 app = Flask(__name__)
+ctx = app.app_context()
 
 class HttpMethod():
     GET = "GET"
 
-@app.route('/')
-def index():
-    return "test index"
-
-@app.route("/getcode", methods=[HttpMethod.GET])
+@app.route('/getcode', methods=[HttpMethod.GET])
 def get_code():
-    return jsonify("Random number or message")
+    res = 'Random number or message'
+    return jsonify(res)
 
-@app.route("/plus/<num1>/<num2>", methods=[HttpMethod.GET])
+@app.route('/plus/<num1>/<num2>', methods=[HttpMethod.GET])
 def plus(num1, num2):
     try:
-        res = float(num1) + float(num2)
-    except Exception as err:
-        raise abort(400, err)
+        cal = float(num1) + float(num2)
+        
+        if (cal.is_integer()):
+            cal = int(cal)
 
-    return jsonify(res)
+    except Exception as err:
+        raise exceptions.BadRequest(err)
+
+    return jsonify(cal)
 
 if __name__ == '__main__':
     app.run(debug=True)
