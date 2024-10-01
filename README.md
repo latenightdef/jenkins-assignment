@@ -2,4 +2,5 @@
 
 This is a repo for experimenting with my own Jenkins instance.
 
-not guaranteed to work
+Code is provided as-is, without any warranty.
+
